@@ -9,6 +9,4 @@ public interface Controllable {
 
 	void resetPosition(Rotation2d position);
 
-	void applyRequest(IRequest<?> request);
-
 }

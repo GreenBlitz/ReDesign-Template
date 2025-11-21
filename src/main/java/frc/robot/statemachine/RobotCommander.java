@@ -4,13 +4,11 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Robot;
 import frc.robot.statemachine.superstructure.Superstructure;
 import frc.robot.subsystems.GBSubsystem;
-import frc.robot.subsystems.swerve.Swerve;
 import java.util.Set;
 
 public class RobotCommander extends GBSubsystem {
 
 	private final Robot robot;
-	private final Swerve swerve;
 	private final Superstructure superstructure;
 	private final PositionTargets positionTargets;
 
@@ -20,7 +18,6 @@ public class RobotCommander extends GBSubsystem {
 		super(logPath);
 		this.robot = robot;
 //        this.swerve = robot.getSwerve();
-		this.swerve = null;
 		this.positionTargets = new PositionTargets(robot);
 		this.superstructure = new Superstructure("StateMachine/Superstructure", robot);
 		this.currentState = null;
@@ -28,7 +25,7 @@ public class RobotCommander extends GBSubsystem {
 		setDefaultCommand(
 			new ConditionalCommand(
 				asSubsystemCommand(Commands.none(), "Disabled"),
-				new InstantCommand(() -> new DeferredCommand(() -> endState(currentState), Set.of(this, swerve)).schedule()),
+				new InstantCommand(() -> new DeferredCommand(() -> endState(currentState), Set.of(this)).schedule()),
 				this::isSubsystemRunningIndependently
 			)
 
@@ -44,7 +41,7 @@ public class RobotCommander extends GBSubsystem {
 	}
 
 	public boolean isSubsystemRunningIndependently() {
-		return superstructure.isSubsystemRunningIndependently() || swerve.getCommandsBuilder().isSubsystemRunningIndependently();
+		return superstructure.isSubsystemRunningIndependently();
 	}
 
 	@Override
@@ -53,8 +50,7 @@ public class RobotCommander extends GBSubsystem {
 	}
 
 	public Command driveWith(RobotState state, Command command) {
-		Command swerveDriveCommand = swerve.getCommandsBuilder().driveByDriversInputs(state.getSwerveState());
-		Command wantedCommand = command.deadlineFor(swerveDriveCommand);
+		Command wantedCommand = Commands.none();
 		return asSubsystemCommand(wantedCommand, state);
 	}
 

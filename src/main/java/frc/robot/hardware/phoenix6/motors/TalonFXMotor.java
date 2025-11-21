@@ -8,22 +8,16 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Robot;
 import frc.robot.RobotConstants;
-import frc.robot.hardware.FollowerInputs;
 import frc.robot.hardware.FollowerInputsAutoLogged;
 import frc.robot.hardware.interfaces.ControllableMotor;
-import frc.robot.hardware.interfaces.IMotionMagicRequest;
-import frc.robot.hardware.interfaces.IRequest;
-import frc.robot.hardware.interfaces.InputSignal;
 import frc.robot.hardware.mechanisms.MechanismSimulation;
 import frc.robot.hardware.phoenix6.Phoenix6Device;
 import frc.robot.hardware.phoenix6.Phoenix6DeviceID;
 import frc.robot.hardware.phoenix6.motors.simulation.TalonFXSimulation;
-import frc.robot.hardware.phoenix6.request.Phoenix6Request;
 import frc.utils.alerts.Alert;
 import frc.utils.alerts.AlertManager;
 import frc.utils.alerts.PeriodicAlert;
 import frc.utils.calibration.sysid.SysIdCalibrator;
-import org.littletonrobotics.junction.Logger;
 
 import java.util.Optional;
 
@@ -136,20 +130,6 @@ public class TalonFXMotor extends Phoenix6Device implements ControllableMotor {
 	}
 
 	@Override
-	public void updateInputs(InputSignal<?>... inputSignals) {
-		super.updateInputs(inputSignals);
-		for (int i = 0; i < followers.length; i++) {
-			String followerLogPath = getLogPath() + "/followers/" + followerConfig.followerIDs[i].name();
-			followerInputs[i].followerData = new FollowerInputs.FollowerData(
-				followers[i].isConnected(),
-				new Rotation2d(followers[i].getPosition().getValue()),
-				followers[i].getMotorVoltage().getValueAsDouble()
-			);
-			Logger.processInputs(followerLogPath, followerInputs[i]);
-		}
-	}
-
-	@Override
 	public SysIdCalibrator.SysIdConfigInfo getSysidConfigInfo() {
 		return sysidConfigInfo;
 	}
@@ -177,18 +157,6 @@ public class TalonFXMotor extends Phoenix6Device implements ControllableMotor {
 	@Override
 	public void setPower(double power) {
 		motor.set(power);
-	}
-
-	@Override
-	public void applyRequest(IRequest<?> request) {
-		if (request instanceof Phoenix6Request<?> phoenix6Request) {
-			if (phoenix6Request instanceof IMotionMagicRequest) {
-				motor.stopMotor();
-			}
-			motor.setControl(phoenix6Request.getControlRequest());
-		} else {
-			new Alert(Alert.AlertType.WARNING, getLogPath() + "Got invalid type of request " + request.getClass().getSimpleName()).report();
-		}
 	}
 
 }

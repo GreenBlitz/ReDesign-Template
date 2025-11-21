@@ -5,8 +5,8 @@ import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.subsystems.GBSubsystem;
 import frc.joysticks.SmartJoystick;
 
 import java.util.function.Consumer;
@@ -16,7 +16,7 @@ import static edu.wpi.first.units.Units.Volts;
 public class SysIdCalibrator {
 
 	private final SysIdRoutine sysIdRoutine;
-	private final GBSubsystem usedSubsystem;
+	private final Subsystem usedSubsystem;
 	private final boolean isCTRE;
 
 	public record SysIdConfigInfo(SysIdRoutine.Config config, boolean isCTRE) {}
@@ -26,7 +26,7 @@ public class SysIdCalibrator {
 	 *
 	 * @param voltageSetControl - note that this function needs to use kg in it so the mechanism won't move because of gravity.
 	 */
-	public SysIdCalibrator(SysIdConfigInfo sysIdConfigInfo, GBSubsystem subsystem, Consumer<Double> voltageSetControl) {
+	public SysIdCalibrator(SysIdConfigInfo sysIdConfigInfo, Subsystem subsystem, Consumer<Double> voltageSetControl) {
 		this.usedSubsystem = subsystem;
 		this.isCTRE = sysIdConfigInfo.isCTRE;
 

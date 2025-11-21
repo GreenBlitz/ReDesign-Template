@@ -19,7 +19,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autonomous.AutonomousConstants;
-import frc.robot.autonomous.PathFollowingCommandsBuilder;
 import frc.robot.subsystems.GBSubsystem;
 import frc.utils.alerts.Alert;
 import frc.utils.math.ToleranceMath;
@@ -109,7 +108,7 @@ public class PathPlannerUtil {
 		List<Waypoint> bezierPoints = PathPlannerPath.waypointsFromPoses(currentPose, targetPose);
 		PathPlannerPath path = new PathPlannerPath(bezierPoints, constraints, null, new GoalEndState(0, targetPose.getRotation()));
 		path.preventFlipping = true;
-		return PathFollowingCommandsBuilder.followPath(path);
+		return AutoBuilder.followPath(path);
 	}
 
 	public static void setDynamicObstacles(List<Pair<Translation2d, Translation2d>> obstacles, Pose2d currentPose) {

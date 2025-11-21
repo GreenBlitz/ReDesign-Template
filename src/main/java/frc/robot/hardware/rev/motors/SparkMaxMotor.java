@@ -6,15 +6,11 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import frc.robot.Robot;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import frc.robot.hardware.interfaces.IMotor;
-import frc.robot.hardware.interfaces.InputSignal;
 import frc.robot.hardware.mechanisms.MechanismSimulation;
 import frc.robot.hardware.rev.motors.simulation.SparkMaxSimulation;
-import frc.robot.hardware.signal.supplied.SuppliedAngleSignal;
-import frc.robot.hardware.signal.supplied.SuppliedDoubleSignal;
 import frc.utils.alerts.Alert;
 import frc.utils.alerts.AlertManager;
 import frc.utils.alerts.PeriodicAlert;
-import org.littletonrobotics.junction.Logger;
 
 import java.util.Optional;
 
@@ -207,31 +203,6 @@ public abstract class SparkMaxMotor implements IMotor {
 	@Override
 	public boolean isConnected() {
 		return true;
-	}
-
-	private boolean isValid(InputSignal<?> signal) {
-		return signal instanceof SuppliedDoubleSignal || signal instanceof SuppliedAngleSignal;
-	}
-
-	private void reportInvalidSignal(InputSignal<?> invalidSignal) {
-		new Alert(
-			Alert.AlertType.WARNING,
-			logPath + "signal named " + invalidSignal.getName() + " has invalid type " + invalidSignal.getClass().getSimpleName()
-		).report();
-	}
-
-	@Override
-	public void updateInputs(InputSignal<?>... inputSignals) {
-		warnings = motor.getWarnings();
-		faults = motor.getFaults();
-
-		for (InputSignal<?> signal : inputSignals) {
-			if (isValid(signal)) {
-				Logger.processInputs(logPath, signal);
-			} else {
-				reportInvalidSignal(signal);
-			}
-		}
 	}
 
 	@Override
