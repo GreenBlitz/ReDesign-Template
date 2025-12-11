@@ -36,8 +36,8 @@ public class TestBuilder {
 		rawVoltageSignal.setUpdateFrequency(RobotConstants.DEFAULT_SIGNALS_FREQUENCY_HERTZ);
 		rawCurrentSignal.setUpdateFrequency(RobotConstants.DEFAULT_SIGNALS_FREQUENCY_HERTZ);
 
-		Supplier<Rotation2d> velocitySignal = () ->  Rotation2d.fromRotations(rawVelocitySignal.refresh().getValueAsDouble());
-		Supplier<Double> voltageSignal = () ->  rawVoltageSignal.refresh().getValueAsDouble();
+		Supplier<Rotation2d> velocitySignal = () -> Rotation2d.fromRotations(rawVelocitySignal.refresh().getValueAsDouble());
+		Supplier<Double> voltageSignal = () -> rawVoltageSignal.refresh().getValueAsDouble();
 		Supplier<Double> currentSignal = () -> rawCurrentSignal.refresh().getValueAsDouble();
 
 		motor.getDevice().optimizeBusUtilization();
