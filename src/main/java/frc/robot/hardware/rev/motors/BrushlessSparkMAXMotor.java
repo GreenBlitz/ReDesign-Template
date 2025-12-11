@@ -38,4 +38,5 @@ public class BrushlessSparkMAXMotor extends SparkMaxMotor implements Controllabl
 		motor.getEncoder().setPosition(position.getRotations());
 	}
 
+
 }

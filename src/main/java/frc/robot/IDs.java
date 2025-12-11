@@ -1,8 +1,14 @@
 package frc.robot;
 
+import frc.robot.hardware.phoenix6.BusChain;
+import frc.robot.hardware.phoenix6.Phoenix6DeviceID;
+
 public class IDs {
 
 	public static class TalonFXIDs {
+
+		public static final Phoenix6DeviceID test = new Phoenix6DeviceID(0, BusChain.ROBORIO);
+
 	}
 
 	public static class CANCoderIDs {
