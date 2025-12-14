@@ -7,6 +7,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.RobotManager;
 import frc.robot.hardware.phoenix6.BusChain;
+import frc.robot.subsystems.TalonFXTestBuilder;
+import frc.robot.subsystems.Test;
 import frc.utils.auto.PathPlannerAutoWrapper;
 import frc.utils.battery.BatteryUtil;
 
@@ -18,15 +20,21 @@ import frc.utils.battery.BatteryUtil;
 public class Robot {
 
 	public static final RobotType ROBOT_TYPE = RobotType.determineRobotType(false);
+	public final Test test;
 
 	public Robot() {
 		BatteryUtil.scheduleLimiter();
+		this.test = TalonFXTestBuilder.buildTest();
 	}
 
 	public void periodic() {
 		BatteryUtil.logStatus();
 		BusChain.logChainsStatuses();
 		CommandScheduler.getInstance().run(); // Should be last
+	}
+
+	public Test getTest() {
+		return test;
 	}
 
 	public PathPlannerAutoWrapper getAutonomousCommand() {
